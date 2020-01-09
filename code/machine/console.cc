@@ -90,7 +90,7 @@ Console::CheckCharAvail()
     int n;
 
     // schedule the next time to poll for a packet
-    interrupt->Schedule(ConsoleReadPoll, (int)this, ConsoleTime, 
+    interrupt->Schedule(ConsoleReadPoll, (int)this, ConsoleTime,
 			ConsoleReadInt);
 
     // do nothing if character is already buffered, or none to be read
@@ -129,7 +129,6 @@ char
 Console::GetChar()
 {
    char ch = incoming;
-
    incoming = EOF;
    return ch;
 }

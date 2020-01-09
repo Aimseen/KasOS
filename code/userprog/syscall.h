@@ -30,6 +30,8 @@
 #define SC_Fork		9
 #define SC_Yield	10
 #define SC_PutChar  11
+#define SC_SynchPutString  12
+
 
 #ifdef IN_USER_MODE
 
@@ -133,6 +135,11 @@ void Yield ();
 * TODO: Comment
 */
 void PutChar(char c);
+
+/*
+* TODO: Comment
+*/
+void SynchPutString(char* string, unsigned size);
 
 #endif // IN_USER_MODE
 

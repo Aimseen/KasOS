@@ -41,6 +41,18 @@ UpdatePC ()
 }
 
 
+void copyStringFromMachine(int from, char *to, unsigned size){
+  char* src;
+  if (size>MAX_STRING_SIZE){
+    size = MAX_STRING_SIZE;
+  }
+  for(unsigned i=0; i<size; i++){
+    src = &machine->mainMemory[from+i];
+    *(to+i) = *src;
+  }
+  *(to+size) = '\0';
+}
+
 //----------------------------------------------------------------------
 // ExceptionHandler
 //      Entry point into the Nachos kernel.  Called when a user program
@@ -75,6 +87,14 @@ void ExceptionHandler(ExceptionType which){
       }
       case SC_PutChar: {
         synchconsole->SynchPutChar((char) machine->ReadRegister(4));
+        break;
+      }
+      case SC_SynchPutString: {
+
+        unsigned size = (unsigned) machine->ReadRegister(5);
+        char s[size+1];
+        copyStringFromMachine(machine->ReadRegister(4), s, size);
+        synchconsole->SynchPutString(s);
         break;
       }
       default: {
