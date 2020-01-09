@@ -145,6 +145,22 @@ SynchPutString:
   j	$31
   .end SynchPutString
 
+  .globl SynchGetChar
+  .ent SynchGetChar
+SynchGetChar:
+  addiu $2,$0,SC_SynchGetChar
+  syscall
+  j	$31
+  .end SynchGetChar
+
+  .globl SynchGetString
+  .ent SynchGetString
+SynchGetString:
+  addiu $2,$0,SC_SynchGetString
+  syscall
+  j	$31
+  .end SynchGetString
+
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main

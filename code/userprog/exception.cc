@@ -90,11 +90,18 @@ void ExceptionHandler(ExceptionType which){
         break;
       }
       case SC_SynchPutString: {
-
         unsigned size = (unsigned) machine->ReadRegister(5);
         char s[size+1];
         copyStringFromMachine(machine->ReadRegister(4), s, size);
         synchconsole->SynchPutString(s);
+        break;
+      }
+      case SC_SynchGetChar: {
+        machine->WriteRegister(2, (int) synchconsole->SynchGetChar());
+        break;
+      }
+      case SC_SynchGetString: {
+        synchconsole->SynchGetString((char*)&machine->mainMemory[machine->ReadRegister(4)], machine->ReadRegister(5));
         break;
       }
       default: {

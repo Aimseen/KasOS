@@ -3,6 +3,7 @@
 #include "system.h"
 #include "synchconsole.h"
 #include "synch.h"
+#include <string>
 
 static Semaphore *readAvail;
 static Semaphore *writeDone;
@@ -41,7 +42,11 @@ char SynchConsole::SynchGetChar(){
   }
 }
 
-void SynchConsole::SynchGetString(char *s, int n)
-{
-// ...
+void SynchConsole::SynchGetString(char *s, int n){
+
+  for(int i=0; i<n; i++){
+    char tmp = SynchGetChar();
+    s[i]=tmp;
+  }
+  s[n+1]=EOF;
 }
