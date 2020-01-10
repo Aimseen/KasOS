@@ -33,6 +33,8 @@
 #define SC_SynchPutString  12
 #define SC_SynchGetChar  13
 #define SC_SynchGetString 14
+#define SC_SynchGetInt 15
+#define SC_SynchPutInt 16
 
 
 #ifdef IN_USER_MODE
@@ -152,6 +154,16 @@ char SynchGetChar();
 * TODO: Comment
 */
 char SynchGetString(char* s, int n);
+
+/*
+* TODO: Comment
+*/
+char SynchGetInt(int* n);
+
+/*
+* TODO: Comment
+*/
+void SynchPutInt(int n);
 
 #endif // IN_USER_MODE
 
