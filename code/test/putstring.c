@@ -1,9 +1,13 @@
 #include "syscall.h"
 
+void printf(char *c, int n){
+  SynchPutString(c,n);
+  PutChar('\n');
+}
 
 int main(){
   char *s = "az\nertyuioqsdfghjklmxcvbn,;:efghjklfghjjklmfghjklaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaan";
-  SynchPutString(s, 300);
-  SynchPutString(s, 5);
-  return 0;
+  printf(s, 300);
+  printf(s, 5);
+  Halt();
 }
