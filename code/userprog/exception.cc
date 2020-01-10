@@ -85,6 +85,11 @@ void ExceptionHandler(ExceptionType which){
         interrupt->Halt();
         break;
       }
+      case SC_Exit: {
+        DEBUG('a', "Shutdown, initiated by user program.\n");
+        interrupt->Halt();
+        break;
+      }
       case SC_PutChar: {
         synchconsole->SynchPutChar((char) machine->ReadRegister(4));
         break;
