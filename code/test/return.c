@@ -6,4 +6,5 @@ char test(){
 int main(){
   char c = test();
   PutChar(c);
+  return 0;
 }

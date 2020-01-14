@@ -117,7 +117,7 @@ main (int argc, char **argv)
 		// for console input
 	    }
       else if (!strcmp (*argv, "-sc"))
-        {			// test the console
+        {			// test the synchconsole
       if (argc == 1)
           SynchConsoleTest (NULL, NULL);
       else

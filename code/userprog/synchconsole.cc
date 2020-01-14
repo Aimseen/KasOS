@@ -1,4 +1,3 @@
-
 #include "copyright.h"
 #include "system.h"
 #include "synchconsole.h"

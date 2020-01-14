@@ -35,6 +35,8 @@
 #define SC_SynchGetString 14
 #define SC_SynchGetInt 15
 #define SC_SynchPutInt 16
+#define SC_UserThreadCreate 17
+#define SC_UserThreadExit 18
 
 
 #ifdef IN_USER_MODE
@@ -164,6 +166,16 @@ char SynchGetInt(int* n);
 * TODO: Comment
 */
 void SynchPutInt(int n);
+
+/*
+* TODO: Comment
+*/
+int UserThreadCreate(void f(void *arg), void *arg);
+
+/*
+* TODO: Comment
+*/
+void UserThreadExit();
 
 #endif // IN_USER_MODE
 

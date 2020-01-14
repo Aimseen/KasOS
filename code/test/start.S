@@ -177,6 +177,22 @@ SynchPutInt:
   j	$31
   .end SynchPutInt
 
+  .globl UserThreadCreate
+  .ent UserThreadCreate
+UserThreadCreate:
+  addiu $2,$0,SC_UserThreadCreate
+  syscall
+  j	$31
+  .end UserThreadCreate
+
+  .globl UserThreadExit
+  .ent UserThreadExit
+UserThreadExit:
+  addiu $2,$0,SC_UserThreadExit
+  syscall
+  j	$31
+  .end UserThreadExit
+
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main
