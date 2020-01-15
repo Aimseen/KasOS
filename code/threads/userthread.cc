@@ -9,7 +9,14 @@ static void StartUserThread(int farg){
   machine->WriteRegister(PCReg, tab[0]);
   machine->WriteRegister(NextPCReg, tab[0] + 4);
   machine->WriteRegister(4, tab[1]);
-  int t=currentThread->space->bm->Find()*PageSize*2+16*2;
+  int t=currentThread->space->bm->Find()*PageSize*2+16*2;//problemme dans la formule
+  /*
+  //vielle formulle
+  currentThread->space->bm->Find()*PageSize*2-16;
+  //probleme d'overflow
+  //run :: ./nachos-step2 -s -rs -x programme
+  //le registre sp : ffffffff au bout d'un moment 
+  */
   printf("%d\n",t);
   machine->WriteRegister(StackReg, t);
   machine->Run();
