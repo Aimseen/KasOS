@@ -83,11 +83,15 @@ void ExceptionHandler(ExceptionType which){
     switch (type) {
       case SC_Halt: {
         DEBUG('a', "Shutdown, initiated by user program.\n");
+
         interrupt->Halt();
         break;
       }
       case SC_Exit: {
         DEBUG('a', "Shutdown, initiated by user program.\n");
+        while(currentThread->space->threads > 1){
+          currentThread->Yield();
+        }
         interrupt->Halt();
         break;
       }

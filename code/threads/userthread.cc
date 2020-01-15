@@ -9,11 +9,11 @@ static void StartUserThread(int farg){
   machine->WriteRegister(NextPCReg, tab[0] + 4);
   machine->WriteRegister(4, tab[1]);
   machine->Run();
-  //UserThreadExit(); made by ThreadRoot?
+   //Finish made by ThreadRoot?
 }
 
 void do_UserThreadExit(){
-  delete currentThread->space;
+  currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
   currentThread->Finish();
 }
 
@@ -22,6 +22,7 @@ int do_UserThreadCreate(int f, int arg){
   int* farg = (int*) malloc(2* sizeof(int));
   farg[0]=f;
   farg[1]=arg;
+  currentThread->space->threads++;
   newThread->Fork(&StartUserThread, (int) farg);
   return 0;
 }

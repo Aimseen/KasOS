@@ -109,7 +109,7 @@ class Thread
     {
 	     return (name);
     }
-    
+
     void Print ()
     {
 	     printf ("%s, ", name);
