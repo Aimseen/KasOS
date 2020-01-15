@@ -9,13 +9,15 @@ static void StartUserThread(int farg){
   machine->WriteRegister(PCReg, tab[0]);
   machine->WriteRegister(NextPCReg, tab[0] + 4);
   machine->WriteRegister(4, tab[1]);
-  machine->WriteRegister(StackReg, currentThread->space->bm->Find()*PageSize*2-16);
+  int t=currentThread->space->bm->Find()*PageSize*2+16*2;
+  printf("%d\n",t);
+  machine->WriteRegister(StackReg, t);
   machine->Run();
    //Finish made by ThreadRoot?
 }
 
 void do_UserThreadExit(){
-  currentThread->space->Clear((machine->ReadRegister(StackReg)+16)/2/pageSize);
+  currentThread->space->bm->Clear((machine->ReadRegister(StackReg)+16)/2/PageSize);
   currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
   currentThread->Finish();
 }

@@ -119,7 +119,8 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			       [noffH.initData.virtualAddr]),
 			      noffH.initData.size, noffH.initData.inFileAddr);
       }
-      *bm = Bitmap(divRoundUp(size, 2*PageSize));
+      threads = 1;
+      bm = new BitMap(divRoundUp(numPages,2));
       bm->Mark(divRoundUp(size, 2*PageSize)-1);
 }
 

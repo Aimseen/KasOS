@@ -14,7 +14,10 @@ void test() {
 
 int main() {
 
+  printf("Debut test program.c",20);
   UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
+  
 
   return 0;
 }
