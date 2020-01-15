@@ -15,7 +15,7 @@ static void StartUserThread(int farg){
   currentThread->space->bm->Find()*PageSize*2-16;
   //probleme d'overflow
   //run :: ./nachos-step2 -s -rs -x programme
-  //le registre sp : ffffffff au bout d'un moment 
+  //le registre sp : ffffffff au bout d'un moment
   */
   printf("%d\n",t);
   machine->WriteRegister(StackReg, t);
@@ -24,7 +24,7 @@ static void StartUserThread(int farg){
 }
 
 void do_UserThreadExit(){
-  currentThread->space->bm->Clear((machine->ReadRegister(StackReg)+16)/2/PageSize);
+  currentThread->space->bm->Clear((machine->ReadRegister(StackReg)+16)/2/PageSize);//?????? Formule surment fausse 
   currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
   currentThread->Finish();
 }
