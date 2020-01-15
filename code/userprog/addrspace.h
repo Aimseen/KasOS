@@ -15,6 +15,7 @@
 
 #include "copyright.h"
 #include "filesys.h"
+#include "bitmap.h"
 
 #define UserStackSize		1024	// increase this as necessary!
 
@@ -33,6 +34,7 @@ class AddrSpace
     void RestoreState ();	// info on a context switch
 
     int threads = 1;
+    Bitmap* bm;
   private:
       TranslationEntry * pageTable;	// Assume linear page table translation
     // for now!

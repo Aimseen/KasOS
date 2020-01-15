@@ -4,15 +4,18 @@
 static void StartUserThread(int farg){
   currentThread->space->InitRegisters();
   currentThread->space->RestoreState();
+
   int* tab = (int*) farg;
   machine->WriteRegister(PCReg, tab[0]);
   machine->WriteRegister(NextPCReg, tab[0] + 4);
   machine->WriteRegister(4, tab[1]);
+  machine->WriteRegister(StackReg, currentThread->space->bm->Find()*PageSize*2-16);
   machine->Run();
    //Finish made by ThreadRoot?
 }
 
 void do_UserThreadExit(){
+  currentThread->space->Clear((machine->ReadRegister(StackReg)+16)/2/pageSize);
   currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
   currentThread->Finish();
 }
