@@ -123,8 +123,10 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 
       threads = 1;
-      bm = new BitMap(divRoundUp(UserStackSize,PagePerTheadStack*PageSize));
-      bm->Mark(((int)numPages * (int)PageSize - 16 + 16 + (int)UserStackSize - ((int)numPages * (int)PageSize))/(int)PagePerTheadStack/(int)PageSize-1);
+      int nbBit=divRoundUp(UserStackSize,PagePerTheadStack*PageSize);
+      bm = new BitMap(nbBit);
+      bm->Mark(nbBit-1);
+      //bm->Mark(((int)numPages * (int)PageSize - 16 + 16 + (int)UserStackSize - ((int)numPages * (int)PageSize))/(int)PagePerTheadStack/(int)PageSize-1);
 }
 
 //----------------------------------------------------------------------

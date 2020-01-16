@@ -8,7 +8,7 @@ void printf(char *c, int n){
 }
 
 void test() {
-  printf("test",4);
+  printf("abcd",4);
   UserThreadExit();
 }
 
@@ -17,7 +17,7 @@ int main() {
   printf("Debut test program.c", 20);
   UserThreadCreate(test, &a);
   UserThreadCreate(test, &a);
-UserThreadCreate(test, &a);
-UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
   return 0;
 }
