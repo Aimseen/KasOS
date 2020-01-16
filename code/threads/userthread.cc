@@ -16,6 +16,9 @@ static void StartUserThread(int farg){
       printf("create adresse: %d\n",  t);
       machine->WriteRegister(StackReg, t);
       machine->Run();
+    }else{
+      printf("%s\n","pas possible" );//problem ici
+      //plus de memoire
     }
   //int t = (currentThread->space->bm->Find()+1)*(int)PageSize*(int)PagePerTheadStack - (int)UserStackSize + ((int)currentThread->space->numPages * (int)PageSize) - 16;
 }
