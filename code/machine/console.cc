@@ -133,7 +133,7 @@ Console::GetChar()
    return ch;
 }
 
-//----------------------------------------------------------------------
+//-----------752752-----------------------------------------------------------
 // Console::PutChar()
 // 	Write a character to the simulated display, schedule an interrupt
 //	to occur in the future, and return.
@@ -142,7 +142,8 @@ Console::GetChar()
 void
 Console::PutChar(char ch)
 {
-    ASSERT(putBusy == FALSE);
+    //ASSERT(putBusy == FALSE);
+		while(putBusy == TRUE) currentThread->Yield();
     WriteFile(writeFileNo, &ch, sizeof(char));
     putBusy = TRUE;
     interrupt->Schedule(ConsoleWriteDone, (int)this, ConsoleTime,

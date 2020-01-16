@@ -119,9 +119,12 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			       [noffH.initData.virtualAddr]),
 			      noffH.initData.size, noffH.initData.inFileAddr);
       }
+
+
+
       threads = 1;
-      bm = new BitMap(divRoundUp(numPages,2));
-      bm->Mark(divRoundUp(size, 2*PageSize)-1);
+      bm = new BitMap(divRoundUp(UserStackSize,PagePerTheadStack*PageSize));
+      bm->Mark(((int)numPages * (int)PageSize - 16 + 16 + (int)UserStackSize - ((int)numPages * (int)PageSize))/(int)PagePerTheadStack/(int)PageSize-1);
 }
 
 //----------------------------------------------------------------------
@@ -168,6 +171,7 @@ AddrSpace::InitRegisters ()
     machine->WriteRegister (StackReg, numPages * PageSize - 16);
     DEBUG ('a', "Initializing stack register to %d\n",
 	   numPages * PageSize - 16);
+
 }
 
 //----------------------------------------------------------------------
