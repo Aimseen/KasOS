@@ -19,5 +19,10 @@ int main() {
   UserThreadCreate(test, &a);
   UserThreadCreate(test, &a);
   UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
+  UserThreadCreate(test, &a);
+  
   return 0;
 }

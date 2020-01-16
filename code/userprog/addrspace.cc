@@ -75,6 +75,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize;	// we need to increase the size
     // to leave room for the stack
     numPages = divRoundUp (size, PageSize);
+    printf("size: %d \n ps: %d \n np: %d", (int)size, (int)PageSize, (int)numPages);
     size = numPages * PageSize;
 
     ASSERT (numPages <= NumPhysPages);	// check we're not trying
