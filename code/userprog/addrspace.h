@@ -16,8 +16,8 @@
 #include "copyright.h"
 #include "filesys.h"
 #include "bitmap.h"
-
-#define UserStackSize		2048	// increase this as necessary!
+#include "synch.h"
+#define UserStackSize		768	// increase this as necessary!
 #define PagePerTheadStack 2
 
 class AddrSpace
@@ -36,6 +36,8 @@ class AddrSpace
 
     int threads;
     BitMap* bm;
+    Semaphore **threadsSema;
+    int * threadsOffset;
     unsigned int numPages;	// Number of pages in the virtual
     // address space
   private:

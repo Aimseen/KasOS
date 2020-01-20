@@ -1,3 +1,4 @@
+
 #include "userthread.h"
 #include "system.h"
 
@@ -21,8 +22,12 @@ static void StartUserThread(int farg){
 
 void do_UserThreadExit(){
   //printf("exit adresse: %d\n",  machine->ReadRegister(StackReg));
-  currentThread->space->bm->Clear(currentThread->bitMapNb);
+
+
   currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
+  currentThread->space->threadsOffset[currentThread->bitMapNb]++;
+  currentThread->space->threadsSema[currentThread->bitMapNb]->V();
+  currentThread->space->bm->Clear(currentThread->bitMapNb);
   currentThread->Finish();
 }
 
@@ -37,10 +42,14 @@ int do_UserThreadCreate(int f, int arg){
     printf("Thread échou a la creation, manque de mémoire\n");
     return -1;
   }
+  delete currentThread->space->threadsSema[newThread->bitMapNb];
+  currentThread->space->threadsSema[newThread->bitMapNb]=new Semaphore("ee",0);
   newThread->Fork(&StartUserThread, (int) farg);
-  return newThread->bitMapNb;
+  return newThread->bitMapNb+currentThread->space->threadsOffset[newThread->bitMapNb]*divRoundUp(UserStackSize,PagePerTheadStack*PageSize);
 }
 
-extern void do_UserThreadJoin(int id){
-
+void do_UserThreadJoin(int id){
+  if(currentThread->space->threadsOffset[id%divRoundUp(UserStackSize,PagePerTheadStack*PageSize)]<=id/divRoundUp(UserStackSize,PagePerTheadStack*PageSize)){
+    currentThread->space->threadsSema[id%divRoundUp(UserStackSize,PagePerTheadStack*PageSize)]->P();
+  }
 }

@@ -88,9 +88,7 @@ void ExceptionHandler(ExceptionType which){
       }
       case SC_Exit: {
         DEBUG('a', "Shutdown, initiated by user program.\n");
-        while(currentThread->space->threads > 1){
-          currentThread->Yield();
-        }
+        
         interrupt->Halt();
         break;
       }
@@ -122,7 +120,7 @@ void ExceptionHandler(ExceptionType which){
         break;
       }
       case SC_UserThreadCreate: {
-        do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5));
+        machine->WriteRegister(2,do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5)));
         break;
       }
       case SC_UserThreadExit: {

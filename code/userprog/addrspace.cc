@@ -126,6 +126,11 @@ AddrSpace::AddrSpace (OpenFile * executable)
       threads = 1;
       int nbBit=divRoundUp(UserStackSize,PagePerTheadStack*PageSize);
       bm = new BitMap(nbBit);
+      threadsSema=(Semaphore **)malloc(nbBit*sizeof(Semaphore*));
+      threadsOffset=(int *)malloc(nbBit*sizeof(int*));
+      for(int j=0;j<nbBit;j++){
+        threadsOffset[j]=0;
+      }
       bm->Mark(nbBit-1);
       //bm->Mark(((int)numPages * (int)PageSize - 16 + 16 + (int)UserStackSize - ((int)numPages * (int)PageSize))/(int)PagePerTheadStack/(int)PageSize-1);
 }
