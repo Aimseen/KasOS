@@ -11,8 +11,8 @@ static void StartUserThread(int farg){
   machine->WriteRegister(4, tab[1]);
 
       int t = (currentThread->bitMapNb+1)*(int)PageSize*(int)PagePerTheadStack - (int)UserStackSize + ((int)currentThread->space->numPages * (int)PageSize) - 16;
-      printf("test: %d\n",  (int)currentThread->space->numPages);
-      printf("create adresse: %d\n",  t);
+      //printf("test: %d\n",  (int)currentThread->space->numPages);
+      //printf("create adresse: %d\n",  t);
       machine->WriteRegister(StackReg, t);
       currentThread->space->threads++;
       machine->Run();
@@ -20,7 +20,7 @@ static void StartUserThread(int farg){
 }
 
 void do_UserThreadExit(){
-  printf("exit adresse: %d\n",  machine->ReadRegister(StackReg));
+  //printf("exit adresse: %d\n",  machine->ReadRegister(StackReg));
   currentThread->space->bm->Clear(currentThread->bitMapNb);
   currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
   currentThread->Finish();

@@ -10,12 +10,15 @@ using namespace std;
 static Semaphore *readAvail;
 static Semaphore *writeDone;
 
+static Semaphore *sema1;
+
 static void ReadAvail(int arg) { readAvail->V(); }
 static void WriteDone(int arg) { writeDone->V(); }
 
 SynchConsole::SynchConsole(char *readFile, char *writeFile){
   readAvail = new Semaphore("read avail", 0);
   writeDone = new Semaphore("write done", 0);
+  sema1=new Semaphore("Sema1", 1);
   console = new Console (readFile, writeFile, ReadAvail, WriteDone, 0);
 }
 
@@ -37,11 +40,13 @@ char SynchConsole::SynchGetChar(){
 }
 
 void SynchConsole::SynchPutString(const char s[]){
+  sema1->P();
   int i=0;
   while(s[i] != '\0'){
     SynchPutChar(s[i]);
     ++i;
   }
+  sema1->V();
 }
 
 void SynchConsole::SynchGetString(char *s, int n){
