@@ -38,5 +38,9 @@ int do_UserThreadCreate(int f, int arg){
     return -1;
   }
   newThread->Fork(&StartUserThread, (int) farg);
-  return 0;
+  return newThread->bitMapNb;
+}
+
+extern void do_UserThreadJoin(int id){
+
 }

@@ -142,8 +142,8 @@ Console::GetChar()
 void
 Console::PutChar(char ch)
 {
-    //ASSERT(putBusy == FALSE);
-		while(putBusy == TRUE) currentThread->Yield();
+    ASSERT(putBusy == FALSE);
+
     WriteFile(writeFileNo, &ch, sizeof(char));
     putBusy = TRUE;
     interrupt->Schedule(ConsoleWriteDone, (int)this, ConsoleTime,

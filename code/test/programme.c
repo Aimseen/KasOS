@@ -4,11 +4,13 @@ int a = 5;
 
 void printf(char *c, int n){
   SynchPutString(c,n);
-  PutChar('\n');
 }
 
 void test() {
+  PutChar('v');
   printf("abcd",4);
+  PutChar('z');
+  PutChar('m');
   UserThreadExit();
 }
 
