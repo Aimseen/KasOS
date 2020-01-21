@@ -22,11 +22,10 @@ static void StartUserThread(int farg){
 
 void do_UserThreadExit(){
   //printf("exit adresse: %d\n",  machine->ReadRegister(StackReg));
-
-
   currentThread->space->threads--;//Ne devrait pas etre exécuté par le thread concerné
   currentThread->space->threadsOffset[currentThread->bitMapNb]++;
   currentThread->space->threadsSema[currentThread->bitMapNb]->V();
+  delete currentThread->space->threadsSema[currentThread->bitMapNb];
   currentThread->space->bm->Clear(currentThread->bitMapNb);
   currentThread->Finish();
 }
@@ -42,7 +41,6 @@ int do_UserThreadCreate(int f, int arg){
     printf("Thread échou a la creation, manque de mémoire\n");
     return -1;
   }
-  delete currentThread->space->threadsSema[newThread->bitMapNb];
   currentThread->space->threadsSema[newThread->bitMapNb]=new Semaphore("ee",0);
   newThread->Fork(&StartUserThread, (int) farg);
   return newThread->bitMapNb+currentThread->space->threadsOffset[newThread->bitMapNb]*divRoundUp(UserStackSize,PagePerTheadStack*PageSize);
