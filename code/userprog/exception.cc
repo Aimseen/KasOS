@@ -43,13 +43,11 @@ UpdatePC ()
 
 
 void copyStringFromMachine(int from, char *to, unsigned size){
-  char* src;
   if (size>MAX_STRING_SIZE){
     size = MAX_STRING_SIZE;
   }
   for(unsigned i=0; i<size; i++){
-    src = &machine->mainMemory[from+i];
-    *(to+i) = *src;
+    machine->ReadMem(from+i, 1, (int*)(to+i));
   }
   *(to+size) = '\0';
 }
@@ -88,7 +86,7 @@ void ExceptionHandler(ExceptionType which){
       }
       case SC_Exit: {
         DEBUG('a', "Shutdown, initiated by user program.\n");
-        
+
         interrupt->Halt();
         break;
       }
@@ -108,11 +106,16 @@ void ExceptionHandler(ExceptionType which){
         break;
       }
       case SC_SynchGetString: {
-        synchconsole->SynchGetString((char*)&machine->mainMemory[machine->ReadRegister(4)], machine->ReadRegister(5));
+        int tmp=-1;
+        machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
+
+        synchconsole->SynchGetString((char*)&machine->mainMemory[tmp], machine->ReadRegister(5));
         break;
       }
       case SC_SynchGetInt: {
-        synchconsole->SynchGetInt((int*)&machine->mainMemory[machine->ReadRegister(4)]);
+        int tmp=-1;
+        machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
+        synchconsole->SynchGetInt((int*)&machine->mainMemory[tmp]);
         break;
       }
       case SC_SynchPutInt: {
