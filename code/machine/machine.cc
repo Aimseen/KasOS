@@ -59,6 +59,7 @@ Machine::Machine(bool debug)
     for (i = 0; i < NumTotalRegs; i++)
         registers[i] = 0;
     mainMemory = new char[MemorySize];
+		frameprovider=new FrameProvider(NumPhysPages);
     for (i = 0; i < MemorySize; i++)
       	mainMemory[i] = 0;
 #ifdef USE_TLB

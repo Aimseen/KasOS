@@ -103,7 +103,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
     for (i = 0; i < numPages; i++)
       {
 	  pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	  pageTable[i].physicalPage = i*2;
+	  pageTable[i].physicalPage = machine->frameprovider->GetEmptyFrame();
 	  pageTable[i].valid = TRUE;
 	  pageTable[i].use = FALSE;
 	  pageTable[i].dirty = FALSE;
@@ -114,7 +114,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 // zero out the entire address space, to zero the unitialized data segment
 // and the stack segment
-    bzero (machine->mainMemory, size);
+    //bzero (machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
     if (noffH.code.size > 0)
@@ -153,6 +153,9 @@ AddrSpace::~AddrSpace ()
 {
   // LB: Missing [] for delete
   // delete pageTable;
+  for(unsigned int i=0;i<numPages;i++){
+    machine->frameprovider->ReleaseFrame(pageTable[i].physicalPage);
+  }
   delete [] pageTable;
   delete bm;
   // End of modification
