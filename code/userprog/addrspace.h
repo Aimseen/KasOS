@@ -17,7 +17,7 @@
 #include "filesys.h"
 #include "bitmap.h"
 #include "synch.h"
-#define UserStackSize		768	// increase this as necessary!
+#define UserStackSize		8192	// increase this as necessary!
 #define PagePerTheadStack 2
 
 class AddrSpace

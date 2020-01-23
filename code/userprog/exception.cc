@@ -25,7 +25,9 @@
 #include "system.h"
 #include "syscall.h"
 #include "userthread.h"
+#include "synch.h"
 
+static Semaphore *verrouxProcess=new Semaphore("eee",1);
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
 // the user program immediately after the "syscall" instruction.
@@ -74,20 +76,35 @@ void copyStringFromMachine(int from, char *to, unsigned size){
 //      "which" is the kind of exception.  The list of possible exceptions
 //      are in machine.h.
 //----------------------------------------------------------------------
+extern void StartProcess (char *filename);
 
+void forkIntermedaire(int parametre){
+  StartProcess ((char*)parametre);
+}
 void ExceptionHandler(ExceptionType which){
   int type = machine->ReadRegister(2);
   if (which == SyscallException) {
     switch (type) {
       case SC_Halt: {
         DEBUG('a', "Shutdown, initiated by user program.\n");
+        printf("%s\n","halt" );
         interrupt->Halt();
         break;
       }
       case SC_Exit: {
+        printf("%s\n","exit" );
         DEBUG('a', "Shutdown, initiated by user program.\n");
-
-        interrupt->Halt();
+        verrouxProcess->P();
+        if(nbProcessus==1){
+          verrouxProcess->V();
+          interrupt->Halt();
+        }else{
+          nbProcessus--;
+          verrouxProcess->V();
+          delete currentThread->space;
+          currentThread->Finish();
+        }
+        //interrupt->Halt();
         break;
       }
       case SC_PutChar: {
@@ -131,6 +148,20 @@ void ExceptionHandler(ExceptionType which){
         break;
       }case SC_UserThreadJoin: {
         do_UserThreadJoin(machine->ReadRegister(4));
+        break;
+      }
+      case SC_ForkExec: {
+        char* string=(char*)malloc(MAX_STRING_SIZE*sizeof(char));
+        copyStringFromMachine(machine->ReadRegister(4), string, MAX_STRING_SIZE);
+        /*int tmp=-1;
+        machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
+        char* string=(char*)&machine->mainMemory[tmp];*/
+        printf("%s\n",string);
+        verrouxProcess->P();
+        nbProcessus++;
+        verrouxProcess->V();
+        Thread * t =new Thread(string);
+        t->Fork(&forkIntermedaire,(int)string);
         break;
       }
       default: {

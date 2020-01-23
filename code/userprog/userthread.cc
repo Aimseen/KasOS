@@ -41,7 +41,7 @@ int do_UserThreadCreate(int f, int arg){
     printf("Thread échou a la creation, manque de mémoire\n");
     return -1;
   }
-  currentThread->space->threadsSema[newThread->bitMapNb]=new Semaphore("ee",0);
+  currentThread->space->threadsSema[newThread->bitMapNb]=new Semaphore("s",0);
   newThread->Fork(&StartUserThread, (int) farg);
   return newThread->bitMapNb+currentThread->space->threadsOffset[newThread->bitMapNb]*divRoundUp(UserStackSize,PagePerTheadStack*PageSize);
 }
