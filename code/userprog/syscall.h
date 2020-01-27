@@ -42,6 +42,7 @@
 #define SC_UserSemaphore 21
 #define SC_P 22
 #define SC_V 23
+#define SC_AllocEmptyPage 24
 
 #ifdef IN_USER_MODE
 
@@ -198,6 +199,8 @@ void* UserSemaphore(const char *debugName, int initialValue);
 void P(void* semaphore);
 
 void V(void* semaphore);
+
+int AllocEmptyPage();
 
 #endif // IN_USER_MODE
 

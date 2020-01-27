@@ -3,13 +3,13 @@
 #define AZER "b"
 const int N = 10; // Choose it large enough!
 
-static void* sema;
-/*typedef struct parametre parametre;
+//static void* sema;
+typedef struct parametre parametre;
 struct parametre
 {
     void* print;
     void* sema;
-};*/
+};
 
 void puts(char *s){
   char *p;
@@ -17,22 +17,23 @@ void puts(char *s){
     PutChar(*p);
   }
 }
-void f(void *s){
+void f(parametre *s){
   int i;
-  P(sema);
+  P(s->sema);
   for (i = 0; i < N; i++){
-    puts((char *)s);
+    puts((char *)s->print);
   }
-  V(sema);
+  V(s->sema);
   UserThreadExit();
 }
 
 int main(){
-  sema=UserSemaphore ("eee", 1);
-  //parametre p1={(void *)THIS,s};
-  int a=UserThreadCreate(f, (void *)THIS);
-  //parametre p2={(void *)AZER,s};
-  int b=UserThreadCreate(f, (void *)AZER);
+  void*sema=UserSemaphore ("eee", 1);
+  parametre p1={(void *)THIS,sema};
+  void * t1=&p1;
+  int a=UserThreadCreate((void (*)(void *))f, t1);
+  parametre p2={(void *)AZER,sema};
+  int b=UserThreadCreate((void (*)(void *))f, (void *)&p2);
   UserThreadJoin(a);
   UserThreadJoin(b);
   return 0;
