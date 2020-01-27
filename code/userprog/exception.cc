@@ -26,6 +26,7 @@
 #include "syscall.h"
 #include "userthread.h"
 #include "synch.h"
+#include "usersynch.h"
 
 static Semaphore *verrouxProcess=new Semaphore("eee",1);
 //----------------------------------------------------------------------
@@ -125,7 +126,6 @@ void ExceptionHandler(ExceptionType which){
       case SC_SynchGetString: {
         int tmp=-1;
         machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
-
         synchconsole->SynchGetString((char*)&machine->mainMemory[tmp], machine->ReadRegister(5));
         break;
       }
@@ -162,6 +162,24 @@ void ExceptionHandler(ExceptionType which){
         verrouxProcess->V();
         Thread * t =new Thread(string);
         t->Fork(&forkIntermedaire,(int)string);
+        break;
+      }
+      case SC_UserSemaphore: {
+        char* string=(char*)malloc(MAX_STRING_SIZE*sizeof(char));
+        copyStringFromMachine(machine->ReadRegister(4), string, MAX_STRING_SIZE);
+        Semaphore *ret=UserSemaphore (string,machine->ReadRegister(5));
+        printf("%d\n",(int)ret );
+        machine->WriteRegister(2,(int)ret);
+        break;
+      }
+      case SC_P: {
+        //printf("%d\n", machine->ReadRegister(4));
+        P ((Semaphore*)machine->ReadRegister(4));
+        break;
+      }
+      case SC_V: {
+        //printf("%d\n", machine->ReadRegister(4));
+        V ((Semaphore*)machine->ReadRegister(4));
         break;
       }
       default: {

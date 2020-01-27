@@ -39,6 +39,9 @@
 #define SC_UserThreadExit 18
 #define SC_UserThreadJoin 19
 #define SC_ForkExec 20
+#define SC_UserSemaphore 21
+#define SC_P 22
+#define SC_V 23
 
 #ifdef IN_USER_MODE
 
@@ -185,10 +188,16 @@ void UserThreadExit();
 void UserThreadJoin(int id);
 
 /*
-*lance un processus 
+*lance un processus
 */
 
 int ForkExec(char *s);
+
+void* UserSemaphore(const char *debugName, int initialValue);
+
+void P(void* semaphore);
+
+void V(void* semaphore);
 
 #endif // IN_USER_MODE
 

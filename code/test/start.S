@@ -209,6 +209,35 @@ ForkExec:
   j	$31
   .end ForkExec
 
+  .globl UserSemaphore
+  .ent UserSemaphore
+UserSemaphore:
+  addiu $2,$0,SC_UserSemaphore
+  syscall
+  j	$31
+  .end UserSemaphore
+
+  .globl V
+  .ent V
+
+  .globl P
+  .ent P
+P:
+  addiu $2,$0,SC_P
+  syscall
+  j	$31
+  .end P
+
+  .globl V
+  .ent V
+
+
+V:
+  addiu $2,$0,SC_V
+  syscall
+  j	$31
+  .end V
+
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main
