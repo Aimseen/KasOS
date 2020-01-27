@@ -156,7 +156,7 @@ void ExceptionHandler(ExceptionType which){
         /*int tmp=-1;
         machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
         char* string=(char*)&machine->mainMemory[tmp];*/
-        printf("%s\n",string);
+        //printf("%s\n",string);
         verrouxProcess->P();
         nbProcessus++;
         verrouxProcess->V();
@@ -168,7 +168,7 @@ void ExceptionHandler(ExceptionType which){
         char* string=(char*)malloc(MAX_STRING_SIZE*sizeof(char));
         copyStringFromMachine(machine->ReadRegister(4), string, MAX_STRING_SIZE);
         Semaphore *ret=UserSemaphore (string,machine->ReadRegister(5));
-        printf("%d\n",(int)ret );
+        //printf("%d\n",(int)ret );
         machine->WriteRegister(2,(int)ret);
         break;
       }
