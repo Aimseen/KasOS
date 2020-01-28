@@ -12,6 +12,9 @@
 // All rights reserved.  See copyright.h for copyright notice and limitation 
 // of liability and disclaimer of warranty provisions.
 
+#include <sys/types.h>
+#include <dirent.h>
+
 #include "copyright.h"
 
 #include "utility.h"
@@ -36,6 +39,7 @@ Copy(const char *from, const char *to)
     int amountRead, fileLength;
     char *buffer;
 
+    printf("testing copy \n");
 // Open UNIX file
     if ((fp = fopen(from, "r")) == NULL) {	 
 	printf("Copy: couldn't open input file %s\n", from);
@@ -68,6 +72,21 @@ Copy(const char *from, const char *to)
     delete openFile;
     fclose(fp);
 }
+
+// CopyDir(const char *from, const char *to) {
+//   FILE *fp;
+//   OpenFile *openFile;
+//   int amountRead, fileLength;
+//   char *buffer;
+
+//   if ((fp = fopen(from, "r")) == NULL) {	 
+//     printf("Copy: couldn't open directory %s\n", from);
+//     return;
+//   }
+
+
+// }
+
 
 //----------------------------------------------------------------------
 // Print
