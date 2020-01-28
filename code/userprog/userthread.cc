@@ -11,12 +11,12 @@ static void StartUserThread(int farg){
   machine->WriteRegister(NextPCReg, tab[0] + 4);
   machine->WriteRegister(4, tab[1]);
 
-      int t = (currentThread->bitMapNb+1)*(int)PageSize*(int)PagePerTheadStack - (int)UserStackSize + ((int)currentThread->space->numPages * (int)PageSize) - 16;
-      //printf("test: %d\n",  (int)currentThread->space->numPages);
-      //printf("create adresse: %d\n",  t);
-      machine->WriteRegister(StackReg, t);
-      currentThread->space->threads++;
-      machine->Run();
+  int t = (currentThread->bitMapNb+1)*(int)PageSize*(int)PagePerTheadStack - (int)UserStackSize + ((int)currentThread->space->numPages * (int)PageSize) - 16;
+  //printf("test: %d\n",  (int)currentThread->space->numPages);
+  //printf("create adresse: %d\n",  t);
+  machine->WriteRegister(StackReg, t);
+  currentThread->space->threads++;
+  machine->Run();
 
 }
 
