@@ -65,12 +65,12 @@ int main(){
   //////////////////////////////////////////////////////////////////////////////
   //lance
   //////////////////////////////////////////////////////////////////////////////
-  for(;nbThread<10;nbThread++){
+  for(;nbThread<20;nbThread++){
     parametre p={nbThread,verrou,plein,vide};
     parametres[nbThread]=p;
     tab[nbThread]=UserThreadCreate((void (*)(void *))producteur,(void *)&parametres[nbThread]);
   }
-  for(;nbThread<20;nbThread++){
+  for(;nbThread<40;nbThread++){
     parametre p={nbThread,verrou,plein,vide};
     parametres[nbThread]=p;
     tab[nbThread]=UserThreadCreate((void (*)(void *))consomateur,(void *)&parametres[nbThread]);
