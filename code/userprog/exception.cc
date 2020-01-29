@@ -164,22 +164,23 @@ void ExceptionHandler(ExceptionType which){
         t->Fork(&forkIntermedaire,(int)string);
         break;
       }
-      case SC_UserSemaphore: {
+      case SC_UserSemaphore: {//semaphoreLibre/tabSemaphore
         char* string=(char*)malloc(MAX_STRING_SIZE*sizeof(char));
         copyStringFromMachine(machine->ReadRegister(4), string, MAX_STRING_SIZE);
-        Semaphore *ret=UserSemaphore (string,machine->ReadRegister(5));
+        int idSema=currentThread->space->semaphoreLibre->Find();
+        currentThread->space->tabSemaphore[idSema]=new Semaphore(string,machine->ReadRegister(5));
         //printf("%d\n",(int)ret );
-        machine->WriteRegister(2,(int)ret);
+        machine->WriteRegister(2,idSema);
         break;
       }
       case SC_P: {
         //printf("%d\n", machine->ReadRegister(4));
-        P ((Semaphore*)machine->ReadRegister(4));
+        currentThread->space->tabSemaphore[machine->ReadRegister(4)]->P();
         break;
       }
       case SC_V: {
         //printf("%d\n", machine->ReadRegister(4));
-        V ((Semaphore*)machine->ReadRegister(4));
+        currentThread->space->tabSemaphore[machine->ReadRegister(4)]->V();
         break;
       }
       default: {

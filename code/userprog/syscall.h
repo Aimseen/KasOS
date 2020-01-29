@@ -42,7 +42,6 @@
 #define SC_UserSemaphore 21
 #define SC_P 22
 #define SC_V 23
-#define SC_AllocEmptyPage 24
 
 #ifdef IN_USER_MODE
 
@@ -194,13 +193,11 @@ void UserThreadJoin(int id);
 
 int ForkExec(char *s);
 
-void* UserSemaphore(const char *debugName, int initialValue);
+int UserSemaphore(const char *debugName, int initialValue);
 
-void P(void* semaphore);
+void P(int semaphore);
 
-void V(void* semaphore);
-
-int AllocEmptyPage();
+void V(int semaphore);
 
 #endif // IN_USER_MODE
 

@@ -17,7 +17,7 @@
 #include "filesys.h"
 #include "bitmap.h"
 #include "synch.h"
-#define UserStackSize		8192	// increase this as necessary!
+#define UserStackSize		32768	// increase this as necessary!
 #define PagePerTheadStack 2
 
 class AddrSpace
@@ -33,6 +33,9 @@ class AddrSpace
 
     void SaveState ();		// Save/restore address space-specific
     void RestoreState ();	// info on a context switch
+
+    Semaphore * tabSemaphore[50];
+    BitMap * semaphoreLibre;
 
     int threads;
     BitMap* bm;

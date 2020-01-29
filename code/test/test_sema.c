@@ -8,7 +8,7 @@ typedef struct parametre parametre;
 struct parametre
 {
     void* print;
-    void* sema;
+    int sema;
 };
 
 void puts(char *s){
@@ -28,7 +28,7 @@ void f(parametre *s){
 }
 
 int main(){
-  void*sema=UserSemaphore ("eee", 1);
+  int sema=UserSemaphore ("eee", 1);
   parametre p1={(void *)THIS,sema};
   int a=UserThreadCreate((void (*)(void *))f,(void *)&p1);
   parametre p2={(void *)AZER,sema};

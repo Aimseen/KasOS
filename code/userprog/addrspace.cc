@@ -131,6 +131,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
       }
 
 
+      semaphoreLibre=new BitMap(sizeof(tabSemaphore)/sizeof(Semaphore*));
 
       threads = 1;
       int nbBit=divRoundUp(UserStackSize,PagePerTheadStack*PageSize);
