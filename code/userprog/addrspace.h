@@ -34,6 +34,8 @@ class AddrSpace
     void SaveState ();		// Save/restore address space-specific
     void RestoreState ();	// info on a context switch
 
+    int AllocEmptyPage();
+    int Sbrk(unsigned n);
     Semaphore * tabSemaphore[50];
     BitMap * semaphoreLibre;
 
@@ -46,7 +48,8 @@ class AddrSpace
   private:
       TranslationEntry * pageTable;	// Assume linear page table translation
     // for now!
-
+      int brk;
+      int HeapPage;
 };
 
 #endif // ADDRSPACE_H

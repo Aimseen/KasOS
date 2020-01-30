@@ -82,9 +82,12 @@ USERPROG_LIBS=start.S
 USER_FLAVORS=step2
 # threads step5 mynetwork final
 
-$(eval $(call define-flavor,step2,userprog filesys-stub,synchconsole.cc userthread.cc usersynch.cc frameprovider.cc))
+#$(eval $(call define-flavor,fs,userprog filesys, synchconsole.cc userthread.cc))
+
+$(eval $(call define-flavor,step2,userprog filesys,synchconsole.cc userthread.cc usersynch.cc frameprovider.cc))
 #$(eval $(call define-flavor,step5,userprog filesys,\
 #     synchconsole.cc userthread.cc))
+
 # $(eval $(call define-flavor,mynetwork,userprog filesys-stub network, \
 #     synchconsole.cc userthread.cc))
 # $(eval $(call define-flavor,final,userprog filesys network,\

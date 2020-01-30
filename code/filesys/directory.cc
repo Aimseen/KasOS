@@ -25,6 +25,7 @@
 #include "filehdr.h"
 #include "directory.h"
 
+#define NumDirEntries 10
 //----------------------------------------------------------------------
 // Directory::Directory
 // 	Initialize a directory; initially, the directory is completely
@@ -39,8 +40,10 @@ Directory::Directory(int size)
 {
     table = new DirectoryEntry[size];
     tableSize = size;
-    for (int i = 0; i < tableSize; i++)
-	table[i].inUse = FALSE;
+    for (int i = 2; i < tableSize; i++) {
+      table[i].inUse = FALSE;
+      table[i].directory = FALSE;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -135,12 +138,42 @@ Directory::Add(const char *name, int newSector)
     for (int i = 0; i < tableSize; i++)
         if (!table[i].inUse) {
             table[i].inUse = TRUE;
+            table[i].directory = 0;
             strncpy(table[i].name, name, FileNameMaxLen); 
             table[i].sector = newSector;
         return TRUE;
 	}
     return FALSE;	// no space.  Fix when we have extensible files.
 }
+
+bool
+Directory::AddDir(const char *name, int newSector)
+{ 
+  if (FindIndex(name) != -1)
+    return FALSE;
+
+  for (int i = 0; i < tableSize; i++)
+    if (!table[i].inUse) {
+      table[i].inUse = TRUE;
+      table[i].directory=1;
+      strncpy(table[i].name, name, FileNameMaxLen); 
+      table[i].sector = newSector;
+      return TRUE;
+    }
+  return FALSE;	// no space.  Fix when we have extensible files.
+}
+
+Directory * Directory::ChangeDir(const char *name) {
+  int sect;
+  Directory * dir = new Directory(NumDirEntries);
+  if ((sect = Find(name)) == -1) {
+    return NULL;
+  }
+ OpenFile * tmp = new OpenFile(sect);
+ dir->FetchFrom(tmp);
+ return dir;
+}
+
 
 //----------------------------------------------------------------------
 // Directory::Remove

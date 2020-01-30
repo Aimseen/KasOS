@@ -183,6 +183,25 @@ void ExceptionHandler(ExceptionType which){
         currentThread->space->tabSemaphore[machine->ReadRegister(4)]->V();
         break;
       }
+      case SC_ChangeDir: {
+        char s[MAX_STRING_SIZE];
+        copyStringFromMachine(machine->ReadRegister(4), s, MAX_STRING_SIZE);
+        fileSystem->ChangeDir(s);
+        break;
+      }
+    case SC_AddDir: {
+      char s[MAX_STRING_SIZE];
+      copyStringFromMachine(machine->ReadRegister(4),s, MAX_STRING_SIZE);
+      fileSystem->CreateDir(s);
+    }
+    case SC_AllocEmptyPage: {
+      machine->WriteRegister(2,currentThread->space->AllocEmptyPage());
+      break;
+    }
+    case SC_Sbrk: {
+      currentThread->space->Sbrk(machine->ReadRegister(4));
+      break;
+    }
       default: {
         printf("Unexpected user mode exception %d %d\n", which, type);
         ASSERT(FALSE);
