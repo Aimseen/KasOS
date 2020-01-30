@@ -31,7 +31,7 @@ SynchDisk *synchDisk;
 int nbProcessus;
 Machine *machine;		// user program memory and registers
 SynchConsole *synchconsole;
-FrameProvider * frameprovider;
+FrameProvider* frameprovider;
 #endif
 
 #ifdef NETWORK
@@ -194,7 +194,6 @@ Cleanup ()
 #ifdef USER_PROGRAM
     delete machine;
     delete synchconsole;
-    delete frameprovider;
 #endif
 
 #ifdef FILESYS_NEEDED
