@@ -25,7 +25,6 @@
 #include "utility.h"
 #include "translate.h"
 #include "disk.h"
-#include "frameprovider.h"
 
 // Definitions related to the size, and format of user memory
 
@@ -155,7 +154,6 @@ class Machine {
 // are in terms of these data structures.
 
     char *mainMemory;		// physical memory to store user program,
-		FrameProvider* frameprovider;
 				// code and data, while executing
     int registers[NumTotalRegs]; // CPU registers, for executing user programs
 

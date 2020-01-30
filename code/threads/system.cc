@@ -31,6 +31,7 @@ SynchDisk *synchDisk;
 int nbProcessus;
 Machine *machine;		// user program memory and registers
 SynchConsole *synchconsole;
+FrameProvider * frameprovider;
 #endif
 
 #ifdef NETWORK
@@ -162,6 +163,7 @@ Initialize (int argc, char **argv)
     machine = new Machine (debugUserProg);	// this must come first
     nbProcessus=1;
     synchconsole = new SynchConsole(NULL, NULL);
+		frameprovider=new FrameProvider(NumPhysPages);
 #endif
 
 #ifdef FILESYS
@@ -192,6 +194,7 @@ Cleanup ()
 #ifdef USER_PROGRAM
     delete machine;
     delete synchconsole;
+    delete frameprovider;
 #endif
 
 #ifdef FILESYS_NEEDED
