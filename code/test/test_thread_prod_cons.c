@@ -1,6 +1,6 @@
 #include "syscall.h"
 
-const int N = 10; // Choose it large enough!
+const int NB_THREAD = 20; // nombre de thread Producteur et consomateur lancer par le programe
 
 typedef struct parametre parametre;
 struct parametre
@@ -56,40 +56,40 @@ int main(){
   //////////////////////////////////////////////////////////////////////////////
   //initialisation structure pour les threads
   //////////////////////////////////////////////////////////////////////////////
-  int verrou=UserSemaphore ("verrou", 1);
+
+  int verrou=UserSemaphore ("verrou", 1);//permet la synchronisation lors des ecriture en console
   int plein=UserSemaphore ("plein", 0);
   int vide=UserSemaphore ("vide", 5);
-  int tab[100];
-  parametre parametres[100];
+  int tab[NB_THREAD*2];//stock les id des thread lancer pour pouveoir join a la fin
+  parametre parametres[NB_THREAD*2];
   int nbThread=0;
+
   //////////////////////////////////////////////////////////////////////////////
-  //lance
+  //lancement des thread Producteur et Consomateur
   //////////////////////////////////////////////////////////////////////////////
-  for(;nbThread<20;nbThread++){
+  for(;nbThread<NB_THREAD;nbThread++){
     parametre p={nbThread,verrou,plein,vide};
     parametres[nbThread]=p;
     tab[nbThread]=UserThreadCreate((void (*)(void *))producteur,(void *)&parametres[nbThread]);
   }
-  for(;nbThread<40;nbThread++){
+  for(;nbThread<NB_THREAD*2;nbThread++){
     parametre p={nbThread,verrou,plein,vide};
     parametres[nbThread]=p;
     tab[nbThread]=UserThreadCreate((void (*)(void *))consomateur,(void *)&parametres[nbThread]);
   }
-  //SynchPutString("Fin Lancer!!!!!!!!",30);
   //////////////////////////////////////////////////////////////////////////////
   //Attente des thread lancer durant le test
   //////////////////////////////////////////////////////////////////////////////
-  /*PutChar('a');
-  UserThreadJoin(tab[10]);
-  PutChar('b');*/
-
-
   int i;
   for(i=0;i<nbThread;i++){
-    SynchPutString("join::",30);
-    SynchPutInt(i);
-    PutChar('\n');
-    UserThreadJoin(tab[i]);
+    if(tab[i]!=-1){//si le trhead a bien etait lancé
+      P(verrou);
+      SynchPutString("join::",30);
+      SynchPutInt(i);
+      PutChar('\n');
+      V(verrou);
+      UserThreadJoin(tab[i]);
+    }
   }
 
   return 0;
