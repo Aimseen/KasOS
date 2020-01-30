@@ -32,7 +32,7 @@
 					// the disk sector size, for
 					// simplicity
 
-#define NumPhysPages    1024
+#define NumPhysPages    4096
 #define MemorySize 	(NumPhysPages * PageSize)
 #define TLBSize		4		// if there is a TLB, make it small
 
@@ -154,6 +154,7 @@ class Machine {
 // are in terms of these data structures.
 
     char *mainMemory;		// physical memory to store user program,
+
 				// code and data, while executing
     int registers[NumTotalRegs]; // CPU registers, for executing user programs
 

@@ -80,7 +80,7 @@ void copyStringFromMachine(int from, char *to, unsigned size){
 extern void StartProcess (char *filename);
 
 void forkIntermedaire(int parametre){
-  StartProcess ((char*)parametre);
+  StartProcess((char*) parametre);
 }
 void ExceptionHandler(ExceptionType which){
   int type = machine->ReadRegister(2);
@@ -96,13 +96,13 @@ void ExceptionHandler(ExceptionType which){
         printf("%s\n","exit" );
         DEBUG('a', "Shutdown, initiated by user program.\n");
         verrouxProcess->P();
+        delete currentThread->space;
         if(nbProcessus==1){
           verrouxProcess->V();
           interrupt->Halt();
         }else{
           nbProcessus--;
           verrouxProcess->V();
-          delete currentThread->space;
           currentThread->Finish();
         }
         //interrupt->Halt();
