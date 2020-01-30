@@ -77,6 +77,8 @@ class FileSystem {
     bool Create(const char *name, int initialSize);  	
 					// Create a file (UNIX creat)
 
+    bool CreateDir(const char *name);
+
     OpenFile* Open(const char *name); 	// Open a file (UNIX open)
 
     bool Remove(const char *name); 	// Delete a file (UNIX unlink)
@@ -84,6 +86,8 @@ class FileSystem {
     void List();			// List all the files in the file system
 
     void Print();			// List all the files and their contents
+
+    void ChangeDir(const char * name);
 
   private:
    OpenFile* freeMapFile;		// Bit map of free disk blocks,

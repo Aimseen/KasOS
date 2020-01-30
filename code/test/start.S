@@ -1,4 +1,4 @@
-/* Start.s
+  /* Start.s
  *	Assembly language assist for user programs running on top of Nachos.
  *
  *	Since we don't want to pull in the entire C library, we define
@@ -237,6 +237,41 @@ V:
   syscall
   j	$31
   .end V
+
+
+  .globl AddDir
+  .ent AddDir
+AddDir:
+  addiu $2,$0,SC_AddDir
+	syscall
+	j	$31
+  .end AddDir
+
+  .globl ChangeDir
+  .ent ChangeDir
+ChangeDir:
+  addiu $2,$0,SC_ChangeDir
+  syscall
+  j	$31
+  .end ChangeDir
+ 
+  .globl AllocEmptyPage
+  .ent AllocEmptyPage
+AllocEmptyPage:
+  addiu $2,$0, SC_AllocEmptyPage
+  syscall
+  j	$31
+.end AllocEmptyPage
+
+  .globl Sbrk
+  .ent Sbrk
+Sbrk:
+	  addiu $2,$0, SC_Sbrk
+	  syscall
+	  j	$31
+	.end Sbrk
+
+
 
 /* dummy function to keep gcc happy */
         .globl  __main

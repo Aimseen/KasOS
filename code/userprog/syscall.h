@@ -42,6 +42,10 @@
 #define SC_UserSemaphore 21
 #define SC_P 22
 #define SC_V 23
+#define SC_ChangeDir 24
+#define SC_AddDir 25
+#define SC_AllocEmptyPage 26
+#define SC_Sbrk 27
 
 #ifdef IN_USER_MODE
 
@@ -198,6 +202,14 @@ int UserSemaphore(const char *debugName, int initialValue);
 void P(int semaphore);
 
 void V(int semaphore);
+
+void ChangeDir(const char *name);
+
+int AddDir(const char *name);
+
+int AllocEmptyPage();
+
+int Sbrk(unsigned n);
 
 #endif // IN_USER_MODE
 

@@ -163,7 +163,7 @@ Directory::AddDir(const char *name, int newSector)
   return FALSE;	// no space.  Fix when we have extensible files.
 }
 
-Directory * Directory::ChangeDirectory(const char *name) {
+Directory * Directory::ChangeDir(const char *name) {
   int sect;
   Directory * dir = new Directory(NumDirEntries);
   if ((sect = Find(name)) == -1) {

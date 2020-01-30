@@ -66,7 +66,7 @@ class Directory {
 
     bool AddDir(const char *name, int newSector);
 
-    Directory * ChangeDirectory(const char *name);
+    Directory * ChangeDir(const char *name);
 
     bool Remove(const char *name);	// Remove a file from the directory
 

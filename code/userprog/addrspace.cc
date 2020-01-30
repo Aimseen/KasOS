@@ -223,3 +223,22 @@ AddrSpace::RestoreState ()
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
 }
+
+int AddrSpace::AllocEmptyPage() {
+  pageTable[HeapPage].physicalPage = machine->frameprovider->GetEmptyFrame();
+  pageTable[HeapPage].valid = TRUE;
+  int addr = HeapPage*PageSize;
+  brk++;
+  return addr;
+
+}
+
+int AddrSpace::Sbrk(unsigned n) {
+  unsigned oldbrk = (unsigned)brk;
+  unsigned newbrk = (unsigned)brk+n;
+  int diffPages = newbrk-oldbrk;
+  for(int i=0; i<diffPages; ++i) {
+    AllocEmptyPage();
+  }
+  return oldbrk;
+}
