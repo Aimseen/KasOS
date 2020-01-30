@@ -28,6 +28,7 @@ SynchDisk *synchDisk;
 #endif
 
 #ifdef USER_PROGRAM		// requires either FILESYS or FILESYS_STUB
+int nbProcessus;
 Machine *machine;		// user program memory and registers
 SynchConsole *synchconsole;
 #endif
@@ -159,6 +160,7 @@ Initialize (int argc, char **argv)
 
 #ifdef USER_PROGRAM
     machine = new Machine (debugUserProg);	// this must come first
+    nbProcessus=1;
     synchconsole = new SynchConsole(NULL, NULL);
 #endif
 

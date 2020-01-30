@@ -22,14 +22,10 @@ void test2() {
 int main() {
 
   //printf("Debut test_synch.c", 18);
-  UserThreadCreate(test1, &a);
-  UserThreadCreate(test2, &a);
-  UserThreadCreate(test1, &a);
-  UserThreadCreate(test2, &a);
-  UserThreadCreate(test1, &a);
-  UserThreadCreate(test2, &a);
-  UserThreadCreate(test1, &a);
-  UserThreadCreate(test2, &a);
+  int ret=UserThreadCreate(test1, &a);
+
+  UserThreadJoin(ret);
+
 
   return 0;
 }

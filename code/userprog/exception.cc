@@ -25,7 +25,10 @@
 #include "system.h"
 #include "syscall.h"
 #include "userthread.h"
+#include "synch.h"
+#include "usersynch.h"
 
+static Semaphore *verrouxProcess=new Semaphore("eee",1);
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
 // the user program immediately after the "syscall" instruction.
@@ -43,13 +46,11 @@ UpdatePC ()
 
 
 void copyStringFromMachine(int from, char *to, unsigned size){
-  char* src;
   if (size>MAX_STRING_SIZE){
     size = MAX_STRING_SIZE;
   }
   for(unsigned i=0; i<size; i++){
-    src = &machine->mainMemory[from+i];
-    *(to+i) = *src;
+    machine->ReadMem(from+i, 1, (int*)(to+i));
   }
   *(to+size) = '\0';
 }
@@ -76,22 +77,35 @@ void copyStringFromMachine(int from, char *to, unsigned size){
 //      "which" is the kind of exception.  The list of possible exceptions
 //      are in machine.h.
 //----------------------------------------------------------------------
+extern void StartProcess (char *filename);
 
+void forkIntermedaire(int parametre){
+  StartProcess ((char*)parametre);
+}
 void ExceptionHandler(ExceptionType which){
   int type = machine->ReadRegister(2);
   if (which == SyscallException) {
     switch (type) {
       case SC_Halt: {
         DEBUG('a', "Shutdown, initiated by user program.\n");
+        printf("%s\n","halt" );
         interrupt->Halt();
         break;
       }
       case SC_Exit: {
+        printf("%s\n","exit" );
         DEBUG('a', "Shutdown, initiated by user program.\n");
-        while(currentThread->space->threads > 1){
-          currentThread->Yield();
+        verrouxProcess->P();
+        if(nbProcessus==1){
+          verrouxProcess->V();
+          interrupt->Halt();
+        }else{
+          nbProcessus--;
+          verrouxProcess->V();
+          delete currentThread->space;
+          currentThread->Finish();
         }
-        interrupt->Halt();
+        //interrupt->Halt();
         break;
       }
       case SC_PutChar: {
@@ -110,11 +124,15 @@ void ExceptionHandler(ExceptionType which){
         break;
       }
       case SC_SynchGetString: {
-        synchconsole->SynchGetString((char*)&machine->mainMemory[machine->ReadRegister(4)], machine->ReadRegister(5));
+        int tmp=-1;
+        machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
+        synchconsole->SynchGetString((char*)&machine->mainMemory[tmp], machine->ReadRegister(5));
         break;
       }
       case SC_SynchGetInt: {
-        synchconsole->SynchGetInt((int*)&machine->mainMemory[machine->ReadRegister(4)]);
+        int tmp=-1;
+        machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
+        synchconsole->SynchGetInt((int*)&machine->mainMemory[tmp]);
         break;
       }
       case SC_SynchPutInt: {
@@ -122,11 +140,47 @@ void ExceptionHandler(ExceptionType which){
         break;
       }
       case SC_UserThreadCreate: {
-        do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5));
+        machine->WriteRegister(2,do_UserThreadCreate(machine->ReadRegister(4), machine->ReadRegister(5)));
         break;
       }
       case SC_UserThreadExit: {
         do_UserThreadExit();
+        break;
+      }case SC_UserThreadJoin: {
+        do_UserThreadJoin(machine->ReadRegister(4));
+        break;
+      }
+      case SC_ForkExec: {
+        char* string=(char*)malloc(MAX_STRING_SIZE*sizeof(char));
+        copyStringFromMachine(machine->ReadRegister(4), string, MAX_STRING_SIZE);
+        /*int tmp=-1;
+        machine->Translate(machine->ReadRegister(4),&tmp,4,TRUE);
+        char* string=(char*)&machine->mainMemory[tmp];*/
+        //printf("%s\n",string);
+        verrouxProcess->P();
+        nbProcessus++;
+        verrouxProcess->V();
+        Thread * t =new Thread(string);
+        t->Fork(&forkIntermedaire,(int)string);
+        break;
+      }
+      case SC_UserSemaphore: {//semaphoreLibre/tabSemaphore
+        char* string=(char*)malloc(MAX_STRING_SIZE*sizeof(char));
+        copyStringFromMachine(machine->ReadRegister(4), string, MAX_STRING_SIZE);
+        int idSema=currentThread->space->semaphoreLibre->Find();
+        currentThread->space->tabSemaphore[idSema]=new Semaphore(string,machine->ReadRegister(5));
+        //printf("%d\n",(int)ret );
+        machine->WriteRegister(2,idSema);
+        break;
+      }
+      case SC_P: {
+        //printf("%d\n", machine->ReadRegister(4));
+        currentThread->space->tabSemaphore[machine->ReadRegister(4)]->P();
+        break;
+      }
+      case SC_V: {
+        //printf("%d\n", machine->ReadRegister(4));
+        currentThread->space->tabSemaphore[machine->ReadRegister(4)]->V();
         break;
       }
       default: {

@@ -29,8 +29,10 @@ SynchConsole::~SynchConsole(){
 }
 
 void SynchConsole::SynchPutChar(const char ch){
+  sema1->P();
   console->PutChar(ch);
   writeDone->P();
+  sema1->V();
 
 }
 
@@ -43,7 +45,8 @@ void SynchConsole::SynchPutString(const char s[]){
   sema1->P();
   int i=0;
   while(s[i] != '\0'){
-    SynchPutChar(s[i]);
+    console->PutChar(s[i]);
+    writeDone->P();
     ++i;
   }
   sema1->V();

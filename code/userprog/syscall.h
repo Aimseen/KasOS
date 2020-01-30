@@ -37,7 +37,11 @@
 #define SC_SynchPutInt 16
 #define SC_UserThreadCreate 17
 #define SC_UserThreadExit 18
-
+#define SC_UserThreadJoin 19
+#define SC_ForkExec 20
+#define SC_UserSemaphore 21
+#define SC_P 22
+#define SC_V 23
 
 #ifdef IN_USER_MODE
 
@@ -138,22 +142,22 @@ void Fork (void (*func) ());
 void Yield ();
 
 /*
-* TODO: Comment
+* Ecrit un charactere en sortie standard
 */
 void PutChar(char c);
 
 /*
-* TODO: Comment
+* Ecrit une chaine de charactere de taille maximume size sur la ortie standard
 */
 void SynchPutString(char* string, unsigned size);
 
 /*
-* TODO: Comment
+* retourne un charactere ecrit dans l'entre standard
 */
 char SynchGetChar();
 
 /*
-* TODO: Comment
+* retourne une chaine de charactere ecrit dans l'entre standard de taille n
 */
 char SynchGetString(char* s, int n);
 
@@ -168,14 +172,32 @@ char SynchGetInt(int* n);
 void SynchPutInt(int n);
 
 /*
-* TODO: Comment
+* Cree un nouveau thread qui execute le code de la fonction f avec les argument passer par la arg
+* retourn l'idantifiant du thread
 */
 int UserThreadCreate(void f(void *arg), void *arg);
 
 /*
-* TODO: Comment
+* Termine le thread
 */
 void UserThreadExit();
+
+/*
+* Attend que le thread id soit terminer
+*/
+void UserThreadJoin(int id);
+
+/*
+*lance un processus
+*/
+
+int ForkExec(char *s);
+
+int UserSemaphore(const char *debugName, int initialValue);
+
+void P(int semaphore);
+
+void V(int semaphore);
 
 #endif // IN_USER_MODE
 
