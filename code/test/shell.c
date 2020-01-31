@@ -1,5 +1,25 @@
 #include "syscall.h"
 
+char* parser(char* str, int size)
+{
+	char delim[] = " ";
+
+  char* cursor = str;
+  char* ptr = cursor;
+    int i = 0;
+    while(i<size || *cursor != *delim){
+      if(*cursor == '\0') ptr = cursor;
+      cursor++;
+    }
+    if(*cursor == *delim){
+      *cursor = '\0';
+      return ptr;
+    }
+
+
+    return 0;
+}
+
 int stringcompare(char * str, char * str2, int start,int len) {
   int i = start;
   while(str[i] != '\0' && i < len) {
@@ -49,15 +69,16 @@ main ()
 
     if (i > 0)
     {
-      if(stringcompare(buffer,"cd",0,2)){
-        char * dirname = secondarg(buffer);
+      if(stringcompare(parser(buffer, 127), "cd",0,5)){
+        char * dirname = parser(buffer, 127);
+        SynchPutString(dirname, 127);
         ChangeDir(dirname);
-        dir = dirname;
-      } else if(stringcompare(buffer, "mkdir",0,5)) {
-        char * dirname = secondarg(buffer);
+        //dir = dirname;
+      } else if(stringcompare(parser(buffer, 127), "mkdir",0,5)) {
+        char * dirname = secondarg(parser(buffer, 127));
         AddDir(dirname);
       }else {
-        ForkExec(buffer);
+        ForkExec(parser(buffer, 127));
       }
     }
   }

@@ -225,7 +225,7 @@ AddrSpace::RestoreState ()
 }
 
 int AddrSpace::AllocEmptyPage() {
-  pageTable[HeapPage].physicalPage = machine->frameprovider->GetEmptyFrame();
+  pageTable[HeapPage].physicalPage = frameprovider->GetEmptyFrame();
   pageTable[HeapPage].valid = TRUE;
   int addr = HeapPage*PageSize;
   brk++;
